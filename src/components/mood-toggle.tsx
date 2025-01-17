@@ -11,7 +11,7 @@ export function ModeToggle() {
       variant="ghost"
       type="button"
       size="icon"
-      className="hover:rounded-full"
+      className="bg-white dark:bg-black hover:rounded-full"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
       <Sun className="h-[1.2rem] w-[1.2rem] text-neutral-800 dark:hidden dark:text-neutral-200" />

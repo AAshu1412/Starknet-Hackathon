@@ -105,7 +105,7 @@ function App() {
           ))}
         </tbody>
       </table>
-
+        
       <button
         onClick={addRow}
         className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition-colors mb-4"
