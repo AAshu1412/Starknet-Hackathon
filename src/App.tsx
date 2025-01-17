@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-// import './App.css'
 import { pinata } from './utils/config';
 
 function App() {
@@ -10,7 +7,6 @@ function App() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
-  /////////////////////////////////////////////////////////////////////////
   const addRow = () => {
     setAttributes([...attributes, { trait_type: "", value: "" }]);
   };
@@ -43,7 +39,6 @@ function App() {
     a.click();
     URL.revokeObjectURL(url);
   };
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFile(event.target?.files?.[0]);
@@ -65,11 +60,11 @@ function App() {
       <input type="file" onChange={changeHandler} />
       <button onClick={handleSubmission}>Submit</button> */}
 
-<div className="p-8 bg-black min-h-screen text-white">
+<div className="p-8 min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
 
       {/* Table */}
-      <table className="w-full border border-gray-300 rounded-lg overflow-hidden mb-4">
+      <table className="w-full border rounded-lg overflow-hidden mb-4">
         <thead className="bg-gray-800">
           <tr>
             <th className="w-[5%] px-4 py-2 text-lg">#</th>
@@ -113,7 +108,7 @@ function App() {
 
       <button
         onClick={addRow}
-        className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors mb-4"
+        className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition-colors mb-4"
       >
         + Add New Trait
       </button>
@@ -136,7 +131,7 @@ function App() {
           value={image}
           onChange={(e) => setImage(e.target.value)}
           placeholder="Enter image link"
-          className="w-full bg-gray-800 text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
+          className="w-full text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
         />
       </div>
 
