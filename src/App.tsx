@@ -60,12 +60,12 @@ function App() {
       <input type="file" onChange={changeHandler} />
       <button onClick={handleSubmission}>Submit</button> */}
 
-<div className="p-8 min-h-screen text-white">
+<div className="p-8 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
 
       {/* Table */}
       <table className="w-full border rounded-lg overflow-hidden mb-4">
-        <thead className="bg-gray-800">
+        <thead className="">
           <tr>
             <th className="w-[5%] px-4 py-2 text-lg">#</th>
             <th className="w-[45%] px-4 py-2 text-lg">Trait Type</th>
@@ -112,7 +112,7 @@ function App() {
       >
         + Add New Trait
       </button>
-
+      
       {/* Description and Image */}
       <div className="mb-4">
         <label className="block mb-2 text-lg font-medium">Description</label>
@@ -120,7 +120,7 @@ function App() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter description"
-          className="w-full bg-gray-800 text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
+          className="w-full border border-gray-600 rounded-lg p-2 focus:outline-none"
           rows={4}
         />
       </div>
@@ -131,14 +131,14 @@ function App() {
           value={image}
           onChange={(e) => setImage(e.target.value)}
           placeholder="Enter image link"
-          className="w-full text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
+          className="w-full border border-gray-600 rounded-lg p-2 focus:outline-none"
         />
       </div>
 
       {/* Generate JSON */}
       <button
         onClick={generateJSON}
-        className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors"
+        className="px-6 py-2 rounded-lg hover:bg-green-500 transition-colors"
       >
         Generate JSON
       </button>
