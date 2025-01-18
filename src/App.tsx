@@ -1,6 +1,11 @@
 import { useState } from 'react'
 // import { pinata } from './utils/config';
 
+// Example of using process conditionally
+if (typeof process !== 'undefined') {
+  // Code that uses process
+}
+
 function App() {
   // const [selectedFile, setSelectedFile] = useState<File>();
   const [attributes, setAttributes] = useState<{ trait_type: string; value: string }[]>([]);
@@ -56,55 +61,52 @@ function App() {
 
   return (
       <div>
-            {/* <label className="form-label"> Choose File</label>
-      <input type="file" onChange={changeHandler} />
-      <button onClick={handleSubmission}>Submit</button> */}
 
-<div className="p-8 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
+        <div className="p-8 min-h-screen">
+          <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
 
       {/* Table */}
-      <table className="w-full border rounded-lg overflow-hidden mb-4">
-        <thead className="">
-          <tr>
-            <th className="w-[5%] px-4 py-2 text-lg">#</th>
-            <th className="w-[45%] px-4 py-2 text-lg">Trait Type</th>
-            <th className="w-[45%] px-4 py-2 text-lg">Value</th>
-            <th className="w-[5%] px-4 py-2 text-lg">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {attributes.map((attribute, index) => (
-            <tr key={index} className="hover:bg-gray-700 group">
-              <td className="px-2 py-1 text-center">{index + 1}</td>
-              <td className="px-2 py-1">
-                <input
-                  value={attribute.trait_type}
-                  onChange={(e) => updateValue(index, "trait_type", e.target.value)}
-                  placeholder="Enter Trait Type"
-                  className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
-                />
-              </td>
-              <td className="px-2 py-1">
-                <input
-                  value={attribute.value}
-                  onChange={(e) => updateValue(index, "value", e.target.value)}
-                  placeholder="Enter Value"
-                  className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
-                />
-              </td>
-              <td className="px-2 py-1 text-center">
-                <button
-                  onClick={() => deleteRow(index)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  X
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <table className="w-full border rounded-lg overflow-hidden mb-4">
+            <thead>
+              <tr>
+                <th className="w-[5%] px-4 py-2 text-lg">#</th>
+                <th className="w-[45%] px-4 py-2 text-lg">Trait Type</th>
+                <th className="w-[45%] px-4 py-2 text-lg">Value</th>
+                <th className="w-[5%] px-4 py-2 text-lg">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {attributes.map((attribute, index) => (
+                <tr key={index} className="hover:bg-gray-700 group">
+                  <td className="px-2 py-1 text-center">{index + 1}</td>
+                  <td className="px-2 py-1">
+                    <input
+                      value={attribute.trait_type}
+                      onChange={(e) => updateValue(index, "trait_type", e.target.value)}
+                      placeholder="Enter Trait Type"
+                      className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
+                    />
+                  </td>
+                  <td className="px-2 py-1">
+                    <input
+                      value={attribute.value}
+                      onChange={(e) => updateValue(index, "value", e.target.value)}
+                      placeholder="Enter Value"
+                      className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
+                    />
+                  </td>
+                  <td className="px-2 py-1 text-center">
+                    <button
+                      onClick={() => deleteRow(index)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      X
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
       <button
         onClick={addRow}

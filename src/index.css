@@ -1,9 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Sora:wght@400;600&family=Monoton&family=Overpass:wght@400;600&display=swap");
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ... */
+/* :root {
+  --background: 30, 30, 47;
+  --foreground: 255, 255, 255;
+  --accent-aqua: 0, 200, 255;
+  --accent-peach: 255, 106, 106;
+  --accent-lavender: 176, 132, 246;
+} */
+
+body {
+  color: rgb(var(--foreground));
+  background: linear-gradient(to bottom, rgb(var(--background)), rgb(42, 42, 72));
+  font-family: "Sora", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.glow {
+  box-shadow: 0 0 10px rgba(var(--accent-aqua), 0.5);
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 15px rgba(var(--accent-aqua), 0.8);
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px rgba(var(--accent-lavender), 0.8);
+  }
+}
+
+
 :root {
+
+  /* --background: 30, 30, 47;
+  --foreground: 255, 255, 255; */
+  --accent-aqua: 0, 200, 255;
+  --accent-peach: 255, 106, 106;
+  --accent-lavender: 176, 132, 246;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -40,12 +87,12 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 0px transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  /* background-color: #1a1a1a; */
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -70,10 +117,41 @@ button:focus-visible {
   }
 }
 
+@layer components {
+  .glow {
+    box-shadow: 0 0 15px theme('colors.aqua.500/0.5');
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 10px theme('colors.aqua.500/0.5');
+  }
+
+  .glow-hover {
+    @apply transition-all duration-300;
+  }
+  
+  .glow-hover:hover {
+    @apply md:shadow-[0_0_20px_theme(colors.aqua.500/0.6)];
+  }
+
+  .card-grid {
+    columns: 2;
+    column-gap: 1rem;
+    @screen sm { columns: 1; }
+    @screen md { columns: 3; }
+    @screen lg { columns: 4; }
+    @screen xl { columns: 5; }
+    @screen 2xl { columns: 6; }
+  }
+}
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
+    --background: 30, 30, 47;
+    --foreground: 255, 255, 255;
+    --accent-aqua: 0, 200, 255;
+    --accent-peach: 255, 106, 106;
+    --accent-lavender: 176, 132, 246;
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;

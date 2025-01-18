@@ -6,13 +6,29 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-  	extend: {
+  	
+		extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+        navy: '#1B1B2F',
+        charcoal: '#232637',
+        aqua: {
+          500: '#00B8D4',
+        },
+        pink: {
+          500: '#F13D78',
+        },
+        lavender: {
+          500: '#B084F6',
+        },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
