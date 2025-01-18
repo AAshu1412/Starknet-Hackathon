@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/*
+  user model id would be the address, it'll also keep the data of which nft they have liked and commented on
+  all the likes will be stored in the database, after every 60 second agent would analize the engagement and determine the new price
+  then the new price would be updated in the contract
+*/
+
+
+
+model NFTDetail {
+  id          String            @id @default(uuid())
+  tokenId     String    
+  userId      String
+  engagement  Engagement        @relation(fields: [userId], references: [id])
+  name        String?
+  uri         String
+  price       Float             @default(0)
+  hasNFTSold  Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([tokenId])
+  @@index([userId])
+  @@map("nft_detail")
+}
+
+model Follwings {
+  id          String            @id @default(uuid())
+  followerId  String    
+  followingId String
+  user        User              @relation(fields: [followerId], references: [id])
+  createdAt   DateTime          @default(now())
+
+  @@index([followerId])
+  @@index([followingId]) 
+  @@map("follwings")
+}
+
+model Followers {
+  id          String            @id @default(uuid()) 
+  followerId  String
+  followedId  String
+  user        User              @relation(fields: [followedId], references: [id])
+  createdAt   DateTime          @default(now())
+
+  @@index([followerId])
+  @@index([followedId])
+  @@map("followers")
+}
+
+model User {
+  id          String            @id
+  following   Follwings[]
+  followers   Followers[]
+  username    String            @unique
+  displayName String
+  pfp         String
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  @@map("user")
+}
+
+model Engagement {
+  id          String            @id
+  nftLikes    NFTLike[]
+  nftcomments NFTcomment[] 
+  nftviews    NFTView[]
+  nftdetails  NFTDetail[]
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  @@map("engagement")
+}
+
+model NFTcomment {
+  id          String            @id @default(uuid())
+  tokenId     String         
+  userId      String
+  content     String
+  engagement  Engagement        @relation(fields: [userId], references: [id])
+  createdAt   DateTime          @default(now())
+
+  @@index([tokenId])
+  @@index([userId])
+  @@map("nft_comment")
+}
+
+model NFTLike {
+  id          String            @id @default(uuid())
+  tokenId     String         
+  userId      String
+  engagement  Engagement        @relation(fields: [userId], references: [id])
+  createdAt   DateTime          @default(now())
+
+
+  @@index([userId, tokenId])
+  @@index([tokenId])
+  @@map("nft_like")
+}
+
+model NFTView {
+  id          String            @id @default(uuid())
+  tokenId     String    
+  userId      String
+  engagement  Engagement        @relation(fields: [userId], references: [id])
+  viewedAt    DateTime          @default(now())
+  
+  @@unique([userId, tokenId])
+  @@index([tokenId])
+  @@map("nft_view")
+}
