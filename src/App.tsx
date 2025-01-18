@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { pinata } from './utils/config';
+// import { pinata } from './utils/config';
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState<File>();
+  // const [selectedFile, setSelectedFile] = useState<File>();
   const [attributes, setAttributes] = useState<{ trait_type: string; value: string }[]>([]);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -40,19 +40,19 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedFile(event.target?.files?.[0]);
-  };
+  // const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedFile(event.target?.files?.[0]);
+  // };
 
-  const handleSubmission = async () => {
-    try {
-      if (selectedFile)
-    {  const upload = await pinata.upload.file(selectedFile)
-      console.log(upload);}
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleSubmission = async () => {
+  //   try {
+  //     if (selectedFile)
+  //   {  const upload = await pinata.upload.file(selectedFile)
+  //     console.log(upload);}
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
       <div>
@@ -105,7 +105,7 @@ function App() {
           ))}
         </tbody>
       </table>
-        
+
       <button
         onClick={addRow}
         className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition-colors mb-4"
