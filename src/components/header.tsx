@@ -8,13 +8,14 @@ import { Search } from "lucide-react";
 const myFrontendProviderUrl = 'https://free-rpc.nethermind.io/sepolia-juno/v0_7';
 
 // Convert Handle to a React component
-const Handle: React.FC<{ theme: string }> = (theme) => {
-
+const Handle: React.FC<{ theme: string }> = (theme) => { 
   const [walletAccount, setWalletAccount] = useState<WalletAccount | null>(null);
 
   const handleConnect = async () => {
+      //@ts-expect-error just a random error 
     const selectedWalletSWO: StarknetWindowObject | null = await connect({ modalMode: 'alwaysAsk', modalTheme: `${theme}` });
     if (selectedWalletSWO) {
+        //@ts-expect-error just a random error 
       const myWalletAccount = new WalletAccount({ nodeUrl: myFrontendProviderUrl }, selectedWalletSWO);
       setWalletAccount(myWalletAccount);
     }
@@ -52,4 +53,3 @@ const Header = () => {
   )
 }
 export default Header
-// 

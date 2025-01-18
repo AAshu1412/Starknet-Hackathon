@@ -1,16 +1,13 @@
-import MobileLayout from '@/components/feed/MobileLayout'
-import DesktopLayout from '@/components/feed/DesktopLayout'
+import NFTFeed from '@/components/feed/NFTFeed'
+import MobileNavigation from '@/components/feed/MobileNavigation'
 
-export default function Feed() {
+export default function Feed()  {
   return (
-  <div className="min-h-screen bg-gradient-to-b from-[#1B1B2F] to-[#1E2A47]"> 
-     <div className="md:hidden"> 
-       <MobileLayout /> 
-    </div> 
-     <div className="hidden md:block"> 
-       <DesktopLayout /> 
-     </div> 
-   </div> 
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow overflow-y-auto pb-16">
+        <NFTFeed />
+      </main>
+      <MobileNavigation />
+    </div>
   )
 }
-
