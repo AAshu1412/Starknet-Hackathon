@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { pinata } from './utils/config';
+import FileUploadComponent from './components/file-upload';
+import { useData } from "@/store/data";
 
 function App() {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [attributes, setAttributes] = useState<{ trait_type: string; value: string }[]>([]);
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [name, setName] = useState("");
+  const {ipfsHash} = useData();
 
   const addRow = () => {
     setAttributes([...attributes, { trait_type: "", value: "" }]);
@@ -22,37 +25,52 @@ function App() {
     setAttributes(updatedAttributes);
   };
 
-  const generateJSON = () => {
-    const jsonData = {
-      attributes,
-      description,
-      image,
-      name: "Pudgy Penguin #880", // Static for this example, can be dynamic if needed
-    };
+  const generateJSON =async () => {
+    if(ipfsHash){
+      const jsonData = {
+        attributes,
+        description,
+        image:`ipfs://${ipfsHash}/`,
+        name, 
+      };
+  
+      const jsonString = JSON.stringify(jsonData, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      //////////////////////////////////////////////////////////
+      // const url = URL.createObjectURL(blob);
+      // const a = document.createElement("a");
+      // a.href = url;
+      // a.download = "data.json";
+      // a.click();
+      // URL.revokeObjectURL(url);
+      ////////////////////////////////////////////////////////////
+      const jsonFile = new File([blob], "metadata.json", { type: "application/json" });
 
-    const jsonString = JSON.stringify(jsonData, null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedFile(event.target?.files?.[0]);
-  };
-
-  const handleSubmission = async () => {
-    try {
-      if (selectedFile)
-    {  const upload = await pinata.upload.file(selectedFile)
-      console.log(upload);}
-    } catch (error) {
-      console.log(error);
+      try {
+        const upload = await pinata.upload.file(jsonFile);
+        console.log("Uploaded JSON to Pinata:", upload);
+        alert("JSON file uploaded to Pinata successfully!");
+      } catch (error) {
+        console.error("Error uploading JSON file to Pinata:", error);
+        alert("Failed to upload JSON file to Pinata.");
+      }
     }
+   
   };
+
+  // const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedFile(event.target?.files?.[0]);
+  // };
+
+  // const handleSubmission = async () => {
+  //   try {
+  //     if (selectedFile)
+  //   {  const upload = await pinata.upload.file(selectedFile)
+  //     console.log(upload);}
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
       <div>
@@ -61,6 +79,7 @@ function App() {
       <button onClick={handleSubmission}>Submit</button> */}
 
 <div className="p-8 min-h-screen text-white">
+  <FileUploadComponent/>
       <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
 
       {/* Table */}
@@ -126,11 +145,11 @@ function App() {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 text-lg font-medium">Image Link</label>
+        <label className="block mb-2 text-lg font-medium">Name of NFT</label>
         <input
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="Enter image link"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter NFT Name"
           className="w-full text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
         />
       </div>
