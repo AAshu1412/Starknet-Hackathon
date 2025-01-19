@@ -1,4 +1,3 @@
-import { ModeToggle } from "@/components/mood-toggle";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import {
@@ -122,7 +121,6 @@ const Header = () => {
               size={20}
             />
           </div>
-          <ModeToggle />
           <Handle />
         </div>
       </nav>

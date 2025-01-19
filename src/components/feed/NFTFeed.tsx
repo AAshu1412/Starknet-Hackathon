@@ -180,52 +180,6 @@ function NFTCard({ imageUrl, title, creator, price, likes, comments, trending }:
   );
 }
 
-// function Sidebar({ className = "" }: { className?: string }) {
-//   return (
-//     <div className={`bg-navy/30 backdrop-blur-md p-6 rounded-2xl ${className}`}>
-//       <div className="mb-8">
-//         <h2 className="font-poppins font-bold text-xl mb-4 flex items-center gap-2">
-//           <TrendingUp className="text-pink-500" />
-//           Trending
-//         </h2>
-//         <div className="space-y-4">
-//           {nfts.filter(nft => nft.trending).map((nft, index) => (
-//             <div key={index} className="flex items-center gap-3">
-//               <img
-//                 src={nft.imageUrl}
-//                 alt={nft.title}
-//                 className="w-12 h-12 rounded-lg object-cover"
-//               />
-//               <div className="flex-1 min-w-0">
-//                 <h3 className="font-medium text-sm truncate">{nft.title}</h3>
-//                 <p className="text-xs text-gray-400">{nft.price} ETH</p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-
-//       <div>
-//         <h2 className="font-poppins font-bold text-xl mb-4 flex items-center gap-2">
-//           <Filter className="text-lavender-500" />
-//           Quick Filters
-//         </h2>
-//         <div className="space-y-2">
-//           {['Most Liked', 'Newest', 'Top Bids'].map((filter, index) => (
-//             <button
-//               key={index}
-//               className="w-full px-4 py-2 rounded-lg bg-navy/50 hover:bg-aqua-500/20 transition-colors text-left text-sm font-medium"
-//             >
-//               {filter}
-//             </button>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-
 const nfts = [
   {
     imageUrl: "https://images.unsplash.com/photo-1736264335209-05960b7aa567",
