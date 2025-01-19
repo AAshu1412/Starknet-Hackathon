@@ -93,7 +93,7 @@
     ]
   },
   {
-    "type": "interface",
+    "type": "interface",0x0589e7208b481b31450a7dddab59416c1b0805bfd0d2e4dc5ea047bd3b78c10d
     "name": "sttark::MyNFT::NFT",
     "items": [
       {

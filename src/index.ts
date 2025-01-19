@@ -1,15 +1,11 @@
 import express from "express";
-import bodyParser from "body-parser";
+import userRoutes from "./routes/user";
+import pricingRoutes from "./routes/priceupdate"
 
-const PORT = process.env.POST || 3000;
 const app = express();
-app.use(bodyParser.json());
-
-const CONTRACT_ADDRESS = '0x0589e7208b481b31450a7dddab59416c1b0805bfd0d2e4dc5ea047bd3b78c10d';
-const ABI = './abis/contract-abi.json';
 
 
+app.use("/api", userRoutes);
+app.use("/api", pricingRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));

@@ -13,7 +13,16 @@ datasource db {
   then the new price would be updated in the contract
 */
 
+model PriceHistory {
+  id        String    @id @default(uuid())
+  nftId     String    // Foreign key to NFTDetail
+  oldPrice  Float
+  newPrice  Float
+  updatedAt DateTime  @default(now())
+  nft       NFTDetail @relation(fields: [nftId], references: [id])
 
+  @@index([nftId])
+}
 
 model NFTDetail {
   id          String            @id @default(uuid())
@@ -26,6 +35,7 @@ model NFTDetail {
   hasNFTSold  Boolean           @default(false)
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
+  priceHistories PriceHistory[]
 
   @@index([tokenId])
   @@index([userId])
@@ -57,7 +67,7 @@ model Followers {
 }
 
 model User {
-  id          String            @id
+  id          String            @id  //this will be the users wallet address
   following   Follwings[]
   followers   Followers[]
   username    String            @unique
