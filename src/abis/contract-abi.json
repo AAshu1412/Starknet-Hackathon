@@ -67,6 +67,10 @@
         "type": "core::byte_array::ByteArray"
       },
       {
+        "name": "image",
+        "type": "core::byte_array::ByteArray"
+      },
+      {
         "name": "token_id",
         "type": "core::integer::u256"
       },
@@ -93,7 +97,7 @@
     ]
   },
   {
-    "type": "interface",0x0589e7208b481b31450a7dddab59416c1b0805bfd0d2e4dc5ea047bd3b78c10d
+    "type": "interface",
     "name": "sttark::MyNFT::NFT",
     "items": [
       {
@@ -106,6 +110,10 @@
           },
           {
             "name": "nft_uri",
+            "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "image_uri",
             "type": "core::byte_array::ByteArray"
           },
           {
@@ -563,7 +571,12 @@
   {
     "type": "constructor",
     "name": "constructor",
-    "inputs": []
+    "inputs": [
+      {
+        "name": "erc20_token",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
   },
   {
     "type": "event",
