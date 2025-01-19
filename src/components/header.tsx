@@ -1,6 +1,4 @@
 import { ModeToggle } from "@/components/mood-toggle";
-// import { connect, StarknetWindowObject } from 'get-starknet';
-// import { WalletAccount } from 'starknet';
 import { Button } from "./ui/button";
 import { useState } from "react";
 import {
@@ -17,19 +15,9 @@ import { useAccount, useConnect } from "@starknet-react/core";
 // Convert Handle to a React component
 const Handle = () => {
   const { address, status } = useAccount();
-  // const [walletAccount, setWalletAccount] = useState<WalletAccount | null>(null);
-  // const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [walletopen, setWalletopen] = useState(false);
   const { connectors, connect } = useConnect();
-  // const handleConnect = async () => {
-  //   const selectedWalletSWO: StarknetWindowObject | null = await connect({ modalMode: 'alwaysAsk', modalTheme: "dark" });
-  //   if (selectedWalletSWO) {
-  //     const myWalletAccount = new WalletAccount({ nodeUrl: myFrontendProviderUrl }, selectedWalletSWO);
-  //     setWalletAccount(myWalletAccount);
-  //   }
-  // };
-  console.log(connectors);
 
   return (
     <div className="relative">
