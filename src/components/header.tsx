@@ -10,7 +10,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAccount, useConnect } from "@starknet-react/core";
+import { useAccount, useConnect, useDisconnect } from "@starknet-react/core";
 
 // Convert Handle to a React component
 const Handle = () => {
@@ -18,6 +18,7 @@ const Handle = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [walletopen, setWalletopen] = useState(false);
   const { connectors, connect } = useConnect();
+  const { disconnect } = useDisconnect()
 
   return (
     <div className="relative">
@@ -76,15 +77,15 @@ const Handle = () => {
           {isOpen && (
             <div className="absolute right-0 mt-2 w-52 rounded-xl bg-navy/90 backdrop-blur-md shadow-lg border border-white/10 overflow-hidden">
               <div className="p-2 space-y-1">
-                <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+                {/* <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
                   <Settings size={16} />
                   <span>Settings</span>
-                </button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+                </button> */}
+                <Link to={`https://sepolia.voyager.online/contract/${address}`}  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
                   <ExternalLink size={16} />
                   <span>View on Explorer</span>
-                </button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-pink-500 hover:bg-white/10 transition-colors">
+                </Link>
+                <button onClick={() => disconnect()} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-pink-500 hover:bg-white/10 transition-colors">
                   <LogOut size={16} />
                   <span>Disconnect</span>
                 </button>
