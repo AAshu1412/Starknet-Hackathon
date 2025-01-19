@@ -60,7 +60,7 @@
       },
       {
         "name": "name",
-        "type": "core::felt252"
+        "type": "core::byte_array::ByteArray"
       },
       {
         "name": "uri",
@@ -118,7 +118,7 @@
           },
           {
             "name": "nft_name",
-            "type": "core::felt252"
+            "type": "core::byte_array::ByteArray"
           }
         ],
         "outputs": [],
