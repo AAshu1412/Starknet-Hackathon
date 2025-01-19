@@ -1,3 +1,29 @@
+use starknet::ContractAddress;
+
+#[starknet::interface]
+pub trait IERC20<TContractState> {
+    fn get_name(self: @TContractState) -> felt252;
+    fn get_symbol(self: @TContractState) -> felt252;
+    fn get_decimals(self: @TContractState) -> u8;
+    fn get_total_supply(self: @TContractState) -> felt252;
+    fn balance_of(self: @TContractState, account: ContractAddress) -> felt252;
+    fn allowance(
+        self: @TContractState, owner: ContractAddress, spender: ContractAddress,
+    ) -> felt252;
+    fn transfer(ref self: TContractState, recipient: ContractAddress, amount: felt252);
+    fn transfer_from(
+        ref self: TContractState,
+        sender: ContractAddress,
+        recipient: ContractAddress,
+        amount: felt252,
+    );
+    fn approve(ref self: TContractState, spender: ContractAddress, amount: felt252);
+    fn increase_allowance(ref self: TContractState, spender: ContractAddress, added_value: felt252);
+    fn decrease_allowance(
+        ref self: TContractState, spender: ContractAddress, subtracted_value: felt252,
+    );
+}
+
 #[starknet::contract]
 mod MyNFT {
     use starknet::storage::StoragePathEntry;
@@ -8,12 +34,8 @@ mod MyNFT {
     use openzeppelin::introspection::src5::SRC5Component;
     use openzeppelin::token::erc721::{ERC721Component, ERC721HooksEmptyImpl};
     use core::array::Array;
-    // use core::array::SpanTrait;
-
-
-    // use core::serde::Serde;
-    // use core::clone::Clone;
-    // use core::serde::Serde;
+    // use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use super::{IERC20Dispatcher, IERC20DispatcherTrait};
 
     component!(path: ERC721Component, storage: erc721, event: ERC721Event);
     component!(path: SRC5Component, storage: src5, event: SRC5Event);
@@ -29,6 +51,7 @@ mod MyNFT {
             ref self: TContractState,
             minterAddress: ContractAddress,
             nft_uri: ByteArray,
+            image_uri: ByteArray,
             nft_name: felt252,
         );
         fn set_price(
@@ -62,6 +85,7 @@ mod MyNFT {
         UserDetails: Map<ContractAddress, Vec<User>>,
         allUserData: Vec<User>,
         token_id: u256,
+        erc20_token: ContractAddress,
     }
 
     #[event]
@@ -79,6 +103,7 @@ mod MyNFT {
         address: ContractAddress,
         name: felt252,
         uri: ByteArray,
+        image: ByteArray,
         token_id: u256,
         like: u256,
         comment: u256,
@@ -88,11 +113,12 @@ mod MyNFT {
     }
 
     #[constructor]
-    fn constructor(ref self: ContractState) {
+    fn constructor(ref self: ContractState, erc20_token: ContractAddress) {
         let name = "Pin";
         let symbol = "PNT";
         let base_uri = "";
         let token_id = 0;
+        self.erc20_token.write(erc20_token);
         self.token_id.write(token_id);
         self.erc721.initializer(name, symbol, base_uri);
         // Initialize empty array
@@ -105,10 +131,12 @@ mod MyNFT {
             ref self: ContractState,
             minterAddress: ContractAddress,
             nft_uri: ByteArray,
+            image_uri: ByteArray,
             nft_name: felt252,
         ) {
             let minter_address: ContractAddress = minterAddress;
             let nftURI: ByteArray = nft_uri.clone();
+            let imageURI: ByteArray = image_uri.clone();
             let nftName: felt252 = nft_name;
             let mut current_token_id: u256 = self.token_id.read();
 
@@ -123,6 +151,7 @@ mod MyNFT {
                 address: minter_address,
                 name: nftName,
                 uri: nftURI,
+                image: imageURI,
                 token_id: current_token_id,
                 like: 0,
                 comment: 0,
@@ -168,7 +197,7 @@ mod MyNFT {
             RecieverAddress: ContractAddress,
             nftTokenId: u256,
         ) {
-            self.erc721.transfer_from(OwnerAddress, RecieverAddress, nftTokenId);
+            let mut paid_the_amount: bool = false;
             //  let mut user_details = ArrayTrait::<User>::new();
             let mut i: u64 = 0;
             while (i < self.allUserData.len()) {
@@ -176,15 +205,33 @@ mod MyNFT {
                     if (self.UserDetails.entry(OwnerAddress).at(i).token_id.read() == nftTokenId
                         && self.UserDetails.entry(OwnerAddress).at(i).hasNFTSold.read() == false) {
                         let mut amin = self.UserDetails.entry(OwnerAddress).at(i).read();
+
+                        if (paid_the_amount == false) {
+                            let erc20_dispatcher = IERC20Dispatcher {
+                                contract_address: self.erc20_token.read(),
+                            };
+                            let buyer_balance: u256 = erc20_dispatcher
+                                .balance_of(RecieverAddress)
+                                .into();
+                            assert(buyer_balance >= amin.price, 'insufficient balance');
+                            erc20_dispatcher
+                                .transfer_from(
+                                    RecieverAddress, OwnerAddress, amin.price.try_into().unwrap(),
+                                );
+                            self.erc721.transfer_from(OwnerAddress, RecieverAddress, nftTokenId);
+                            paid_the_amount = true;
+                        }
+
                         let mut userr = User {
                             address: RecieverAddress,
-                            name: amin.name,
-                            uri: amin.uri,
+                            name: self.UserDetails.entry(OwnerAddress).at(i).name.read(),
+                            uri: self.UserDetails.entry(OwnerAddress).at(i).uri.read(),
+                            image: self.UserDetails.entry(OwnerAddress).at(i).image.read(),
                             token_id: nftTokenId,
-                            like: amin.like,
-                            comment: amin.comment,
-                            view: amin.view,
-                            price: amin.price,
+                            like: self.UserDetails.entry(OwnerAddress).at(i).like.read(),
+                            comment: self.UserDetails.entry(OwnerAddress).at(i).comment.read(),
+                            view: self.UserDetails.entry(OwnerAddress).at(i).view.read(),
+                            price: self.UserDetails.entry(OwnerAddress).at(i).price.read(),
                             hasNFTSold: false,
                         };
                         self.UserDetails.entry(RecieverAddress).append().write(userr.clone());
@@ -197,6 +244,7 @@ mod MyNFT {
                                     address: OwnerAddress,
                                     name: 0_felt252,
                                     uri: "",
+                                    image:"",
                                     token_id: 0,
                                     like: 0,
                                     comment: 0,
@@ -211,10 +259,28 @@ mod MyNFT {
                 if (self.allUserData.at(i).token_id.read() == nftTokenId
                     && self.allUserData.at(i).hasNFTSold.read() == false) {
                     let mut amin = self.allUserData.at(i).read();
+
+                    if (paid_the_amount == false) {
+                        let erc20_dispatcher = IERC20Dispatcher {
+                            contract_address: self.erc20_token.read(),
+                        };
+                        let buyer_balance: u256 = erc20_dispatcher
+                            .balance_of(RecieverAddress)
+                            .into();
+                        assert(buyer_balance == amin.price, 'insufficient balance');
+                        erc20_dispatcher
+                            .transfer_from(
+                                RecieverAddress, OwnerAddress, amin.price.try_into().unwrap(),
+                            );
+                        self.erc721.transfer_from(OwnerAddress, RecieverAddress, nftTokenId);
+                        paid_the_amount = true;
+                    }
+
                     let mut userr = User {
                         address: RecieverAddress,
                         name: amin.name,
                         uri: amin.uri,
+                        image: amin.image,
                         token_id: nftTokenId,
                         like: amin.like,
                         comment: amin.comment,
@@ -232,6 +298,7 @@ mod MyNFT {
                                 address: OwnerAddress,
                                 name: 0_felt252,
                                 uri: "",
+                                image:"",
                                 token_id: 0,
                                 like: 0,
                                 comment: 0,
