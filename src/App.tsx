@@ -1,5 +1,7 @@
 import { useState } from 'react'
-// import { pinata } from './utils/config';
+import { pinata } from './utils/config';
+import FileUploadComponent from './components/file-upload';
+import { useData } from "@/store/data";
 
 // Example of using process conditionally
 if (typeof process !== 'undefined') {
@@ -7,10 +9,11 @@ if (typeof process !== 'undefined') {
 }
 
 function App() {
-  // const [selectedFile, setSelectedFile] = useState<File>();
+  const [selectedFile, setSelectedFile] = useState<File>();
   const [attributes, setAttributes] = useState<{ trait_type: string; value: string }[]>([]);
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [name, setName] = useState("");
+  const { ipfsHash } = useData();
 
   const addRow = () => {
     setAttributes([...attributes, { trait_type: "", value: "" }]);
@@ -27,22 +30,30 @@ function App() {
     setAttributes(updatedAttributes);
   };
 
-  const generateJSON = () => {
-    const jsonData = {
-      attributes,
-      description,
-      image,
-      name: "Pudgy Penguin #880", // Static for this example, can be dynamic if needed
-    };
+  const generateJSON = async () => {
+    if (ipfsHash) {
+      const jsonData = {
+        attributes,
+        description,
+        image: `ipfs://${ipfsHash}/`, // Use the IPFS hash here
+        name,
+      };
 
-    const jsonString = JSON.stringify(jsonData, null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.json";
-    a.click();
-    URL.revokeObjectURL(url);
+      const jsonString = JSON.stringify(jsonData, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const jsonFile = new File([blob], "metadata.json", { type: "application/json" });
+
+      try {
+        const upload = await pinata.upload.file(jsonFile);
+        console.log("Uploaded JSON to Pinata:", upload);
+        alert("JSON file uploaded to Pinata successfully!");
+      } catch (error) {
+        console.error("Error uploading JSON file to Pinata:", error);
+        alert("Failed to upload JSON file to Pinata.");
+      }
+    } else {
+      alert("IPFS hash is not available.");
+    }
   };
 
   // const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,93 +71,93 @@ function App() {
   // };
 
   return (
-      <div>
+    <div>
+      <div className="p-8 min-h-screen text-white">
+        <FileUploadComponent />
+        <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
 
-        <div className="p-8 min-h-screen">
-          <h1 className="text-2xl font-bold mb-4">Dynamic JSON Builder</h1>
-
-      {/* Table */}
-          <table className="w-full border rounded-lg overflow-hidden mb-4">
-            <thead>
-              <tr>
-                <th className="w-[5%] px-4 py-2 text-lg">#</th>
-                <th className="w-[45%] px-4 py-2 text-lg">Trait Type</th>
-                <th className="w-[45%] px-4 py-2 text-lg">Value</th>
-                <th className="w-[5%] px-4 py-2 text-lg">Actions</th>
+        {/* Table */}
+        <table className="w-full border rounded-lg overflow-hidden mb-4">
+          <thead className="bg-gray-800">
+            <tr>
+              <th className="w-[5%] px-4 py-2 text-lg">#</th>
+              <th className="w-[45%] px-4 py-2 text-lg">Trait Type</th>
+              <th className="w-[45%] px-4 py-2 text-lg">Value</th>
+              <th className="w-[5%] px-4 py-2 text-lg">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {attributes.map((attribute, index) => (
+              <tr key={index} className="hover:bg-gray-700 group">
+                <td className="px-2 py-1 text-center">{index + 1}</td>
+                <td className="px-2 py-1">
+                  <input
+                    value={attribute.trait_type}
+                    onChange={(e) => updateValue(index, "trait_type", e.target.value)}
+                    placeholder="Enter Trait Type"
+                    className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1">
+                  <input
+                    value={attribute.value}
+                    onChange={(e) => updateValue(index, "value", e.target.value)}
+                    placeholder="Enter Value"
+                    className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1 text-center">
+                  <button
+                    onClick={() => deleteRow(index)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    X
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {attributes.map((attribute, index) => (
-                <tr key={index} className="hover:bg-gray-700 group">
-                  <td className="px-2 py-1 text-center">{index + 1}</td>
-                  <td className="px-2 py-1">
-                    <input
-                      value={attribute.trait_type}
-                      onChange={(e) => updateValue(index, "trait_type", e.target.value)}
-                      placeholder="Enter Trait Type"
-                      className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
-                    />
-                  </td>
-                  <td className="px-2 py-1">
-                    <input
-                      value={attribute.value}
-                      onChange={(e) => updateValue(index, "value", e.target.value)}
-                      placeholder="Enter Value"
-                      className="w-full bg-transparent border-b border-gray-500 focus:outline-none"
-                    />
-                  </td>
-                  <td className="px-2 py-1 text-center">
-                    <button
-                      onClick={() => deleteRow(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      X
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
 
-      <button
-        onClick={addRow}
-        className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition-colors mb-4"
-      >
-        + Add New Trait
-      </button>
-      
-      {/* Description and Image */}
-      <div className="mb-4">
-        <label className="block mb-2 text-lg font-medium">Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Enter description"
-          className="w-full border border-gray-600 rounded-lg p-2 focus:outline-none"
-          rows={4}
-        />
+        <button
+          onClick={addRow}
+          className="px-4 py-2 text-white rounded-lg hover:bg-gray-700 transition-colors mb-4"
+        >
+          + Add New Trait
+        </button>
+        
+        {/* Description and Image */}
+        <div className="mb-4">
+          <label className="block mb-2 text-lg font-medium">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Enter description"
+            className="w-full bg-gray-800 text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
+            rows={4}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2 text-lg font-medium">Name of NFT</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter NFT Name"
+            className="w-full text-white border border-gray-600 rounded-lg p-2 focus:outline-none"
+          />
+        </div>
+
+        {/* Generate JSON */}
+        <button
+          onClick={generateJSON}
+          className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors"
+        >
+          Generate JSON
+        </button>
       </div>
-
-      <div className="mb-4">
-        <label className="block mb-2 text-lg font-medium">Image Link</label>
-        <input
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="Enter image link"
-          className="w-full border border-gray-600 rounded-lg p-2 focus:outline-none"
-        />
-      </div>
-
-      {/* Generate JSON */}
-      <button
-        onClick={generateJSON}
-        className="px-6 py-2 rounded-lg hover:bg-green-500 transition-colors"
-      >
-        Generate JSON
-      </button>
     </div>
-      </div>
-    )
+  )
 }
 
 export default App
