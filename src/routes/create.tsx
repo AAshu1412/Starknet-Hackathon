@@ -7,14 +7,14 @@ import {
   Upload,
   X,
   Plus,
-  ChevronDown,
-  LogOut,
-  User,
-  ExternalLink,
+  // ChevronDown,
+  // LogOut,
+  // User,
+  // ExternalLink,
 } from "lucide-react";
 
 export default function UploadPage() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -112,7 +112,7 @@ export default function UploadPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#42007a] to-[#7f20ff] p-4 md:p-6">
       {/* Header */}
-      <header className="max-w-7xl mx-auto flex items-center justify-between mb-8">
+      {/* <header className="max-w-7xl mx-auto flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
           <ImageIcon className="w-8 h-8 text-white" />
           <h1 className="text-2xl font-bold text-white">Blazy</h1>
@@ -155,7 +155,7 @@ export default function UploadPage() {
             </div>
           )}
         </div>
-      </header>
+      </header> */}
 
       <main className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-white text-center mb-8">
