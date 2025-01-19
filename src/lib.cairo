@@ -52,7 +52,7 @@ mod MyNFT {
             minterAddress: ContractAddress,
             nft_uri: ByteArray,
             image_uri: ByteArray,
-            nft_name: felt252,
+            nft_name: ByteArray,
         );
         fn set_price(
             ref self: TContractState,
@@ -101,7 +101,7 @@ mod MyNFT {
     #[derive(Drop, starknet::Store, Serde, Clone)]
     pub struct User {
         address: ContractAddress,
-        name: felt252,
+        name: ByteArray,
         uri: ByteArray,
         image: ByteArray,
         token_id: u256,
@@ -132,12 +132,12 @@ mod MyNFT {
             minterAddress: ContractAddress,
             nft_uri: ByteArray,
             image_uri: ByteArray,
-            nft_name: felt252,
+            nft_name: ByteArray,
         ) {
             let minter_address: ContractAddress = minterAddress;
             let nftURI: ByteArray = nft_uri.clone();
             let imageURI: ByteArray = image_uri.clone();
-            let nftName: felt252 = nft_name;
+            let nftName: ByteArray = nft_name.clone();
             let mut current_token_id: u256 = self.token_id.read();
 
             current_token_id = current_token_id + 1;
@@ -242,7 +242,7 @@ mod MyNFT {
                             .write(
                                 User {
                                     address: OwnerAddress,
-                                    name: 0_felt252,
+                                    name: "",
                                     uri: "",
                                     image:"",
                                     token_id: 0,
@@ -296,7 +296,7 @@ mod MyNFT {
                         .write(
                             User {
                                 address: OwnerAddress,
-                                name: 0_felt252,
+                                name: "",
                                 uri: "",
                                 image:"",
                                 token_id: 0,
