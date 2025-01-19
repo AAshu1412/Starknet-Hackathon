@@ -135,14 +135,49 @@ button:focus-visible {
   }
 
   .card-grid {
-    columns: 2;
+    columns: 1;
     column-gap: 1rem;
     @screen sm { columns: 1; }
     @screen md { columns: 3; }
     @screen lg { columns: 4; }
     @screen xl { columns: 5; }
     @screen 2xl { columns: 6; }
+
+
+    
   }
+  .profile-image {
+    @apply relative rounded-full overflow-hidden border-4 border-transparent transition-all duration-300;
+  }
+
+  .profile-image:hover {
+    @apply md:border-aqua-500 md:shadow-[0_0_30px_theme(colors.aqua.500/0.4)];
+  }
+
+  .stat-item {
+    @apply flex flex-col items-center;
+  }
+
+  .stat-value {
+    @apply text-2xl font-bold font-poppins glow-text;
+  }
+
+  .stat-label {
+    @apply text-sm text-gray-400 mt-1;
+  }
+
+  .tab-button {
+    @apply px-4 py-2 rounded-full font-medium transition-all duration-300;
+  }
+
+  .tab-button.active {
+    @apply bg-aqua-500 text-white shadow-[0_0_20px_theme(colors.aqua.500/0.4)];
+  }
+
+  .tab-button:not(.active) {
+    @apply text-gray-400 hover:text-white hover:bg-white/10;
+  }
+
 }
 
 @layer base {

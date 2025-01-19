@@ -128,7 +128,7 @@ function NFTCard({ imageUrl, title, creator, price, likes, comments, trending }:
 
         {/* Desktop Overlay */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/50 to-transparent transition-opacity duration-200
+          className={`absolute hidden md:block inset-0 bg-gradient-to-t from-navy/90 via-navy/50 to-transparent transition-opacity duration-200
             ${showOverlay ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100 hidden md:block'}`}
         >
           <div className="absolute bottom-0 left-0 right-0 p-4">

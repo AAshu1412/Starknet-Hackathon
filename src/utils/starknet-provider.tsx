@@ -3,14 +3,16 @@ import React from "react";
 import { sepolia } from "@starknet-react/chains";
 import {
   StarknetConfig,
-  publicProvider,
   argent,
   braavos,
   useInjectedConnectors,
-  voyager
+  voyager,
+  jsonRpcProvider
 } from "@starknet-react/core";
+
  
 export function StarknetProvider({ children }: { children: React.ReactNode }) {
+
   const { connectors } = useInjectedConnectors({
     recommended: [
       argent(),
@@ -20,14 +22,11 @@ export function StarknetProvider({ children }: { children: React.ReactNode }) {
     order: "random"
   });
  
-  if (typeof process !== 'undefined') {
-    // Code that uses process
-  }
  
   return (
     <StarknetConfig
       chains={[sepolia]}
-      provider={publicProvider()}
+      provider={jsonRpcProvider({rpc: () => ({nodeUrl: process.env.VITE_RPC_URL }) })}
       connectors={connectors}
       explorer={voyager}
     >
