@@ -13,6 +13,7 @@ const MobileNavigation = () => {
   )
 }
 
+//@ts-expect-error read
 const NavItem = ({ icon, isHighlighted = false }) => (
   <button className={`items-center 
   ${isHighlighted ? 'text-[#F13D78]' : 'text-[#B8BCC3]'}

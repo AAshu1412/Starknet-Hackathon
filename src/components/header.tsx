@@ -108,43 +108,6 @@ const Handle = () => {
     </div>
   );
 };
-// return (
-// <>
-{
-  /* <Button
-          onClick={handleConnect}
-          className="hidden md:block px-4 py-2 text-white rounded-full bg-aqua-500/20 hover:bg-aqua-500/30 transition-colors">
-          Connect Wallet
-        </Button>
-          <div className="hidden md:block overflow-hidden">
-            <div
-              className="rounded-full w-10 h-10 "
-              onClick={() => setIsProfileOpen(!isProfileOpen)}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe"
-                alt="Profile"
-                className="rounded-full w-full h-full"
-              />
-            </div>
-            {isProfileOpen && <ProfileDropdown onClose={() => setIsProfileOpen(false)} />}
-          </div>
-           <button className="lg:hidden text-[#B084F6] hover:text-[#00B8D4] transition-colors">
-            <Menu size={24} />
-          </button> */
-}
-
-{
-  /* </> */
-}
-
-{
-  /* ) */
-}
-
-{
-  /* }; */
-}
 
 const Header = () => {
   return (

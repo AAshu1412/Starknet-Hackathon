@@ -15,7 +15,7 @@ const DesktopSidebar = () => {
     </aside>
   )
 }
-
+//@ts-expect-error heleo
 const NavItem = ({ icon, label, isHighlighted = false }) => (
   <li>
     <button className={`flex items-center space-x-4 ${isHighlighted ? 'text-[#F13D78]' : 'text-[#B8BCC3]'} hover:text-[#00B8D4] transition-colors w-full`}>
