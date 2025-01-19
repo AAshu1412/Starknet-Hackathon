@@ -6,13 +6,12 @@ import {
   ExternalLink,
   LogOut,
   Search,
-  Settings,
+  // Settings,
   Wallet,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAccount, useConnect, useDisconnect } from "@starknet-react/core";
 
-// Convert Handle to a React component
 const Handle = () => {
   const { address, status } = useAccount();
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +30,7 @@ const Handle = () => {
             Connect Wallet
           </Button>
           {walletopen && (
-            <div className="absolute right-0 mt-2 w-52 rounded-xl bg-navy/90 backdrop-blur-md shadow-lg border border-white/10 overflow-hidden">
+            <div className="absolute z-50 right-0 mt-2 w-52 rounded-xl bg-navy/90 backdrop-blur-md shadow-lg border border-white/10 overflow-hidden">
               <div className="p-2 space-y-1">
                 {connectors.map((connector, index) => (
                   <button
@@ -108,7 +107,7 @@ const Header = () => {
           dark:text-white
           font-['Monoton'] text-glow"
           >
-            Blazy
+            Hype
           </h1>
         </Link>
         <div className="flex items-center space-x-4">
