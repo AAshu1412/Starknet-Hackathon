@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { pinata } from "@/utils/config";
 import { useData } from "@/store/data";
 import { DragEvent, ChangeEvent } from "react";
@@ -12,10 +12,38 @@ import {
   // User,
   // ExternalLink,
 } from "lucide-react";
+import abi from "@/abis/contract-abi.json";
+import {
+  Abi,
+  useAccount,
+  useContract,
+  useSendTransaction,
+  useContractWrite,
+  useTransactionReceipt,
+} from "@starknet-react/core";
+import { useMatch } from "react-router-dom";
 
 export default function UploadPage() {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  // const [image, setImage] = useState("");
+  const [attributes, setAttributes] = useState<
+    { trait_type: string; value: string }[]
+  >([]);
+  const { setIpfsHash } = useData();
+  const [jsonipfsHash, setJsonIpfsHashState] = useState<string>("");
+  const [ipfsHash, setIpfsHashState] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
+  const { address } = useAccount();
+  const { contract } = useContract({
+    address:
+      "0x05768af9b2d52f7a159461690ec18f1d5ee035b7c1a7de5298f8a2a0309716c2",
+    abi: abi as Abi,
+  });
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -39,18 +67,32 @@ export default function UploadPage() {
       handleFileSelect(e.target.files[0]);
     }
   };
+  const calls = useMemo(() => {
+    if (!contract || !address) return [];
+    return [contract.populate("mint", [address, jsonipfsHash, ipfsHash, name])];
+  }, [address, jsonipfsHash, ipfsHash, name]);
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  // const [image, setImage] = useState("");
-  const [attributes, setAttributes] = useState<
-    { trait_type: string; value: string }[]
-  >([]);
-  const { setIpfsHash } = useData();
-  const [ipfsHash, setIpfsHashState] = useState<string>("");
+  const {
+    send: writeAsync,
+    data: writeData,
+    isPending: writeIsPending,
+  } = useSendTransaction({
+    calls,
+  });
+
+  const {
+    data: waitData,
+    status: waitStatus,
+    isLoading: waitIsLoading,
+    isError: waitIsError,
+    error: waitError,
+  } = useTransactionReceipt({ hash: writeData?.transaction_hash, watch: true });
+
+
+  useEffect(() => {
+    console.log(writeData, writeIsPending);
+    console.log(`data ${waitData}\nstatus: ${waitIsLoading}\nerorr: ${waitError} `)
+  }, [writeAsync, writeData, waitData, waitError, waitIsLoading, writeIsPending]);
 
   const handleSubmission = async () => {
     try {
@@ -60,7 +102,6 @@ export default function UploadPage() {
         setIpfsHashState(upload.IpfsHash);
         console.log("Upload successful:", upload);
 
-        // Generate JSON after successful upload, using the hash directly
         const jsonData = {
           attributes,
           description,
@@ -77,7 +118,9 @@ export default function UploadPage() {
         try {
           const jsonUpload = await pinata.upload.file(jsonFile);
           console.log("Uploaded JSON to Pinata:", jsonUpload);
-          alert("JSON file uploaded to Pinata successfully!");
+          setIpfsHash(upload.IpfsHash);
+          setJsonIpfsHashState(jsonUpload.IpfsHash);
+          writeAsync();
         } catch (error) {
           console.error("Error uploading JSON file to Pinata:", error);
           alert("Failed to upload JSON file to Pinata.");
@@ -89,6 +132,8 @@ export default function UploadPage() {
       console.error("Error during file upload:", error);
     }
   };
+
+  // Execute the transaction when transactionCalls is updated
 
   const addRow = () => {
     setAttributes([...attributes, { trait_type: "", value: "" }]);
