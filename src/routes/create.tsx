@@ -18,10 +18,8 @@ import {
   useAccount,
   useContract,
   useSendTransaction,
-  useContractWrite,
   useTransactionReceipt,
 } from "@starknet-react/core";
-import { useMatch } from "react-router-dom";
 
 export default function UploadPage() {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -69,8 +67,9 @@ export default function UploadPage() {
   };
   const calls = useMemo(() => {
     if (!contract || !address) return [];
+    //@ts-ignore
     return [contract.populate("mint", [address, jsonipfsHash, ipfsHash, name])];
-  }, [address, jsonipfsHash, ipfsHash,contract, name]);
+  }, [address, jsonipfsHash, ipfsHash, contract, name]);
 
   const {
     send: writeAsync,
@@ -91,7 +90,7 @@ export default function UploadPage() {
 
   useEffect(() => {
     console.log(writeData, writeIsPending);
-    console.log(`data ${waitData}\nstatus: ${waitIsLoading}\nerorr: ${waitError} `)
+    console.log(`data ${waitData}\nstatus: ${waitIsLoading}\nerorr: ${waitError}\nwaitStatus: ${waitStatus}\nwaitERROR ${waitIsError} `)
   }, [writeAsync, writeData, waitData, waitError, waitIsLoading, writeIsPending]);
 
   const handleSubmission = async () => {
@@ -212,11 +211,10 @@ export default function UploadPage() {
           <div className="space-y-6">
             {/* File Upload Area */}
             <div
-              className={`relative rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 ${
-                isDragging
-                  ? "border-white bg-white/20"
-                  : "border-white/40 hover:border-white/60 bg-white/10"
-              }`}
+              className={`relative rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 ${isDragging
+                ? "border-white bg-white/20"
+                : "border-white/40 hover:border-white/60 bg-white/10"
+                }`}
               onDragOver={(e) => {
                 e.preventDefault();
                 setIsDragging(true);
