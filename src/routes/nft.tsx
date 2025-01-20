@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { 
-  Heart, 
-  Eye, 
-  MessageCircle, 
-  Share2, 
+import React, { useState } from "react";
+import {
+  Heart,
+  Eye,
+  MessageCircle,
+  Share2,
   ChevronDown,
-  Send
-} from 'lucide-react';
+  Send,
+} from "lucide-react";
+import { useParams } from "react-router-dom";
 
 interface Comment {
   id: string;
@@ -45,90 +46,93 @@ interface NFT {
 }
 
 const sampleNFT: NFT = {
-  id: '1',
-  title: 'Cosmic Dreamscape #42',
-  image: 'https://images.unsplash.com/photo-1634973357973-f2ed2657db3c',
-  description: 'A mesmerizing digital artwork that explores the boundaries between reality and imagination. This piece combines elements of abstract art with cosmic themes, creating a unique visual experience that captures the essence of digital creativity.',
+  id: "1",
+  title: "Cosmic Dreamscape #42",
+  image: "https://images.unsplash.com/photo-1634973357973-f2ed2657db3c",
+  description:
+    "A mesmerizing digital artwork that explores the boundaries between reality and imagination. This piece combines elements of abstract art with cosmic themes, creating a unique visual experience that captures the essence of digital creativity.",
   creator: {
-    name: 'CryptoArtist',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde'
+    name: "CryptoArtist",
+    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
   },
   owner: {
-    name: 'NFTCollector',
-    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956'
+    name: "NFTCollector",
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956",
   },
   price: 2.5,
   likes: 423,
   views: 1892,
   comments: [
     {
-      id: '1',
+      id: "1",
       user: {
-        name: 'PixelMaster',
-        avatar: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d'
+        name: "PixelMaster",
+        avatar: "https://images.unsplash.com/photo-1633332755192-727a05c4013d",
       },
-      text: 'This is absolutely stunning! The attention to detail is remarkable.',
-      timestamp: '2 hours ago'
+      text: "This is absolutely stunning! The attention to detail is remarkable.",
+      timestamp: "2 hours ago",
     },
     {
-      id: '2',
+      id: "2",
       user: {
-        name: 'ArtLover',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330'
+        name: "ArtLover",
+        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
       },
-      text: 'The color palette is so vibrant and eye-catching. Great work!',
-      timestamp: '5 hours ago'
-    }
+      text: "The color palette is so vibrant and eye-catching. Great work!",
+      timestamp: "5 hours ago",
+    },
   ],
-  created: '2024-03-15',
-  contractAddress: '0x1234...5678',
-  tokenId: '42',
+  created: "2024-03-15",
+  contractAddress: "0x1234...5678",
+  tokenId: "42",
   traits: [
-    { trait_type: 'Background', value: 'Cosmic Night' },
-    { trait_type: 'Style', value: 'Abstract' },
-    { trait_type: 'Color Scheme', value: 'Vibrant' }
-  ]
+    { trait_type: "Background", value: "Cosmic Night" },
+    { trait_type: "Style", value: "Abstract" },
+    { trait_type: "Color Scheme", value: "Vibrant" },
+  ],
 };
 
 const relatedNFTs = [
   {
-    id: '2',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe',
-    title: 'Digital Metropolis',
-    creator: 'NFTMaster',
+    id: "2",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe",
+    title: "Digital Metropolis",
+    creator: "NFTMaster",
     price: 1.8,
-    likes: 892
+    likes: 892,
   },
   {
-    id: '3',
-    image: 'https://images.unsplash.com/photo-1633101585272-9511612d3936',
-    title: 'Abstract Reality',
-    creator: 'PixelPirate',
+    id: "3",
+    image: "https://images.unsplash.com/photo-1633101585272-9511612d3936",
+    title: "Abstract Reality",
+    creator: "PixelPirate",
     price: 3.2,
-    likes: 1247
+    likes: 1247,
   },
   {
-    id: '4',
-    image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e',
-    title: 'Neon Dreams',
-    creator: 'CryptoArtist',
+    id: "4",
+    image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e",
+    title: "Neon Dreams",
+    creator: "CryptoArtist",
     price: 4.0,
-    likes: 756
+    likes: 756,
   },
   {
-    id: '5',
-    image: 'https://images.unsplash.com/photo-1638803040283-7a5ffd48dad5',
-    title: 'Virtual Horizons',
-    creator: 'NFTMaster',
+    id: "5",
+    image: "https://images.unsplash.com/photo-1638803040283-7a5ffd48dad5",
+    title: "Virtual Horizons",
+    creator: "NFTMaster",
     price: 2.1,
-    likes: 543
-  }
+    likes: 543,
+  },
 ];
 
 export default function Nft() {
+  const { id } = useParams<{ id: string }>();
+  console.log(id)
   const [isLiked, setIsLiked] = useState(false);
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [showMetadata, setShowMetadata] = useState(false);
 
   const handleLike = () => {
@@ -144,7 +148,7 @@ export default function Nft() {
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Error sharing:', error);
+        console.log("Error sharing:", error);
       }
     }
   };
@@ -152,8 +156,7 @@ export default function Nft() {
   const handleSubmitComment = (e: React.FormEvent) => {
     e.preventDefault();
     if (newComment.trim()) {
-      // Add comment logic here
-      setNewComment('');
+      setNewComment("");
     }
   };
 
@@ -226,7 +229,9 @@ export default function Nft() {
 
             <div className="space-y-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <div className="space-y-4">
-                <h1 className="text-3xl font-bold text-white">{sampleNFT.title}</h1>
+                <h1 className="text-3xl font-bold text-white">
+                  {sampleNFT.title}
+                </h1>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <img
@@ -236,7 +241,9 @@ export default function Nft() {
                     />
                     <div>
                       <p className="text-white/60 text-sm">Creator</p>
-                      <p className="text-white font-medium">{sampleNFT.creator.name}</p>
+                      <p className="text-white font-medium">
+                        {sampleNFT.creator.name}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -247,14 +254,18 @@ export default function Nft() {
                     />
                     <div>
                       <p className="text-white/60 text-sm">Owner</p>
-                      <p className="text-white font-medium">{sampleNFT.owner.name}</p>
+                      <p className="text-white font-medium">
+                        {sampleNFT.owner.name}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h2 className="text-xl font-semibold text-white">Description</h2>
+                <h2 className="text-xl font-semibold text-white">
+                  Description
+                </h2>
                 <p className="text-white/80 leading-relaxed">
                   {sampleNFT.description}
                 </p>
@@ -268,7 +279,7 @@ export default function Nft() {
                   <ChevronDown
                     size={20}
                     className={`transition-transform duration-300 ${
-                      showMetadata ? 'rotate-180' : ''
+                      showMetadata ? "rotate-180" : ""
                     }`}
                   />
                   Details
@@ -277,16 +288,24 @@ export default function Nft() {
                   <div className="space-y-4 pt-2">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <p className="text-white/60 text-sm">Contract Address</p>
-                        <p className="text-white font-medium">{sampleNFT.contractAddress}</p>
+                        <p className="text-white/60 text-sm">
+                          Contract Address
+                        </p>
+                        <p className="text-white font-medium">
+                          {sampleNFT.contractAddress}
+                        </p>
                       </div>
                       <div className="space-y-1">
                         <p className="text-white/60 text-sm">Token ID</p>
-                        <p className="text-white font-medium">{sampleNFT.tokenId}</p>
+                        <p className="text-white font-medium">
+                          {sampleNFT.tokenId}
+                        </p>
                       </div>
                       <div className="space-y-1">
                         <p className="text-white/60 text-sm">Created</p>
-                        <p className="text-white font-medium">{sampleNFT.created}</p>
+                        <p className="text-white font-medium">
+                          {sampleNFT.created}
+                        </p>
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -297,8 +316,12 @@ export default function Nft() {
                             key={index}
                             className="bg-white/5 rounded-lg p-2 text-center"
                           >
-                            <p className="text-white/60 text-xs">{trait.trait_type}</p>
-                            <p className="text-white font-medium">{trait.value}</p>
+                            <p className="text-white/60 text-xs">
+                              {trait.trait_type}
+                            </p>
+                            <p className="text-white font-medium">
+                              {trait.value}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -318,14 +341,16 @@ export default function Nft() {
                   <button
                     onClick={handleLike}
                     className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-                      isLiked ? 'text-pink-500' : 'text-white'
+                      isLiked ? "text-pink-500" : "text-white"
                     }`}
                   >
                     <Heart
                       size={24}
-                      className={isLiked ? 'fill-current' : ''}
+                      className={isLiked ? "fill-current" : ""}
                     />
-                    <span>{isLiked ? sampleNFT.likes + 1 : sampleNFT.likes}</span>
+                    <span>
+                      {isLiked ? sampleNFT.likes + 1 : sampleNFT.likes}
+                    </span>
                   </button>
                   <div className="flex items-center gap-2 text-lg font-medium text-white">
                     <Eye size={24} />
@@ -342,7 +367,9 @@ export default function Nft() {
               <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl">
                 <div>
                   <p className="text-white/60 text-sm">Current Price</p>
-                  <p className="text-2xl font-bold text-white">{sampleNFT.price} ETH</p>
+                  <p className="text-2xl font-bold text-white">
+                    {sampleNFT.price} ETH
+                  </p>
                 </div>
                 <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#42007a] to-[#7f20ff] hover:from-[#4b0088] hover:to-[#8c37ff] text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl">
                   Buy Now
@@ -399,7 +426,9 @@ export default function Nft() {
 
         {/* Related NFTs */}
         <div className="mt-16 space-y-8">
-          <h2 className="text-2xl font-bold text-white">More NFTs You May Like</h2>
+          <h2 className="text-2xl font-bold text-white">
+            More NFTs You May Like
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {relatedNFTs.map((nft) => (
               <div
@@ -414,10 +443,14 @@ export default function Nft() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <h3 className="text-white font-medium mb-1">{nft.title}</h3>
+                      <h3 className="text-white font-medium mb-1">
+                        {nft.title}
+                      </h3>
                       <p className="text-white/80 text-sm">{nft.creator}</p>
                       <div className="flex items-center justify-between mt-2">
-                        <p className="text-white font-medium">{nft.price} ETH</p>
+                        <p className="text-white font-medium">
+                          {nft.price} ETH
+                        </p>
                         <div className="flex items-center gap-1 text-white">
                           <Heart size={16} />
                           <span className="text-sm">{nft.likes}</span>

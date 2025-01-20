@@ -6,6 +6,7 @@ import {
   TextSelection as Collection,
   MoreHorizontal,
 } from "lucide-react";
+import { useAccount } from "@starknet-react/core";
 
 interface NFTCardProps {
   imageUrl: string;
@@ -124,6 +125,9 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"created" | "collected">(
     "created"
   );
+  const { address } = useAccount();
+  const imgUri = `https://api.dicebear.com/9.x/bottts/svg?seed=${address}`;
+
 
   const profileNFTs = [
     {
@@ -168,7 +172,8 @@ export default function ProfilePage() {
           <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
             <div className="profile-image w-32 h-32 md:w-40 md:h-40">
               <img
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe"
+                // src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe"
+                src={address?`${imgUri}`: `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe`}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full"
               />
@@ -177,7 +182,7 @@ export default function ProfilePage() {
               <h2 className="text-3xl font-poppins font-bold mb-2">
                 CryptoArtist
               </h2>
-              <p className="text-gray-400 mb-4">@cryptoartist</p>
+              <p className="text-gray-400 mb-4">{address ? `@${address?.slice(0,4)}...${address?.slice(-3)}` : "anon"}</p>
               <p className="text-lg mb-6 max-w-2xl">
                 Digital artist exploring the boundaries of NFTs and creative
                 expression.
