@@ -16,7 +16,7 @@ const Handle = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [walletopen, setWalletopen] = useState(false);
   const { connectors, connect } = useConnect();
-  const { disconnect } = useDisconnect()
+  const { disconnect } = useDisconnect();
 
   return (
     <div className="relative">
@@ -79,15 +79,24 @@ const Handle = () => {
                   <Settings size={16} />
                   <span>Settings</span>
                 </button> */}
-                <Link to={`/profile`} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+                <Link
+                  to={`/profile`}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+                >
                   <Settings size={16} />
                   <span>Profile</span>
                 </Link>
-                <Link to={`https://sepolia.voyager.online/contract/${address}`} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+                <Link
+                  to={`https://sepolia.voyager.online/contract/${address}`}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+                >
                   <ExternalLink size={16} />
                   <span>View on Explorer</span>
                 </Link>
-                <button onClick={() => disconnect()} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-pink-500 hover:bg-white/10 transition-colors">
+                <button
+                  onClick={() => disconnect()}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-pink-500 hover:bg-white/10 transition-colors"
+                >
                   <LogOut size={16} />
                   <span>Disconnect</span>
                 </button>
@@ -102,7 +111,7 @@ const Handle = () => {
 
 const Header = () => {
   return (
-    <header className="w-full p-4 md:px-8">
+      <header className="w-full p-4 md:px-8">
       <nav className="flex justify-between items-center">
         <Link to="/">
           <h1
@@ -126,7 +135,10 @@ const Header = () => {
             />
           </div>
 
-          <Link to={"/create"} className="flex text-white items-center gap-2 px-4 py-2 rounded-full bg-aqua-500/20 hover:bg-aqua-500/30 transition-colors"          >
+          <Link
+            to={"/create"}
+            className="flex text-white items-center gap-2 px-4 py-2 rounded-full bg-aqua-500/20 hover:bg-aqua-500/30 transition-colors"
+          >
             {/* <Plus size={16} /> */}
             <span>Create</span>
           </Link>

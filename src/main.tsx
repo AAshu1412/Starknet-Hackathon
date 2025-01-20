@@ -11,6 +11,7 @@ import Create from "./routes/create";
 import { DataProvider } from "./store/data";
 import { HelmetProvider } from "react-helmet-async";
 import { StarknetProvider } from "./utils/starknet-provider";
+import Nft from "./routes/nft";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")!).render(
               <Header />
               <Routes>
                 <Route path="/" element={<Feed />} />
+                <Route path="/nft/:id" element={<Nft/>} />
                 <Route path="/about" element={<About />} />
                 <Route path="/create" element={<Create />} />
                 <Route path="/profile" element={<Profile />} />
