@@ -70,7 +70,7 @@ export default function UploadPage() {
   const calls = useMemo(() => {
     if (!contract || !address) return [];
     return [contract.populate("mint", [address, jsonipfsHash, ipfsHash, name])];
-  }, [address, jsonipfsHash, ipfsHash, name]);
+  }, [address, jsonipfsHash, ipfsHash,contract, name]);
 
   const {
     send: writeAsync,
