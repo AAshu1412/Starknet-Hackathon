@@ -9,43 +9,7 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 
-interface Comment {
-  id: string;
-  user: {
-    name: string;
-    avatar: string;
-  };
-  text: string;
-  timestamp: string;
-}
-
-interface NFT {
-  id: string;
-  title: string;
-  image: string;
-  description: string;
-  creator: {
-    name: string;
-    avatar: string;
-  };
-  owner: {
-    name: string;
-    avatar: string;
-  };
-  price: number;
-  likes: number;
-  views: number;
-  comments: Comment[];
-  created: string;
-  contractAddress: string;
-  tokenId: string;
-  traits: Array<{
-    trait_type: string;
-    value: string;
-  }>;
-}
-
-const sampleNFT: NFT = {
+const NFT = {
   id: "1",
   title: "Cosmic Dreamscape #42",
   image: "https://images.unsplash.com/photo-1634973357973-f2ed2657db3c",
@@ -127,7 +91,7 @@ const relatedNFTs = [
   },
 ];
 
-export default function Nft() {
+export default function Nft({ price, created, traits, image, comments, views, likes, title, creator, description, tokenId, contractAddress, owner }: NFT) {
   const { id } = useParams<{ id: string }>();
   console.log(id)
   const [isLiked, setIsLiked] = useState(false);
@@ -143,8 +107,8 @@ export default function Nft() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: sampleNFT.title,
-          text: `Check out this NFT: ${sampleNFT.title}`,
+          title: title,
+          text: `Check out this NFT: ${title}`,
           url: window.location.href,
         });
       } catch (error) {
@@ -221,8 +185,8 @@ export default function Nft() {
           <div className="space-y-6">
             <div className="rounded-2xl overflow-hidden bg-white/10 backdrop-blur-sm shadow-xl group">
               <img
-                src={sampleNFT.image}
-                alt={sampleNFT.title}
+                src={image}
+                alt={title}
                 className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
@@ -230,32 +194,32 @@ export default function Nft() {
             <div className="space-y-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <div className="space-y-4">
                 <h1 className="text-3xl font-bold text-white">
-                  {sampleNFT.title}
+                  {title}
                 </h1>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <img
-                      src={sampleNFT.creator.avatar}
-                      alt={sampleNFT.creator.name}
+                      src={creator.avatar}
+                      alt={creator.name}
                       className="w-10 h-10 rounded-full"
                     />
                     <div>
                       <p className="text-white/60 text-sm">Creator</p>
                       <p className="text-white font-medium">
-                        {sampleNFT.creator.name}
+                        {creator.name}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <img
-                      src={sampleNFT.owner.avatar}
-                      alt={sampleNFT.owner.name}
+                      src={owner.avatar}
+                      alt={owner.name}
                       className="w-10 h-10 rounded-full"
                     />
                     <div>
                       <p className="text-white/60 text-sm">Owner</p>
                       <p className="text-white font-medium">
-                        {sampleNFT.owner.name}
+                        {owner.name}
                       </p>
                     </div>
                   </div>
@@ -267,7 +231,7 @@ export default function Nft() {
                   Description
                 </h2>
                 <p className="text-white/80 leading-relaxed">
-                  {sampleNFT.description}
+                  {description}
                 </p>
               </div>
 
@@ -278,9 +242,8 @@ export default function Nft() {
                 >
                   <ChevronDown
                     size={20}
-                    className={`transition-transform duration-300 ${
-                      showMetadata ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-300 ${showMetadata ? "rotate-180" : ""
+                      }`}
                   />
                   Details
                 </button>
@@ -292,26 +255,26 @@ export default function Nft() {
                           Contract Address
                         </p>
                         <p className="text-white font-medium">
-                          {sampleNFT.contractAddress}
+                          {contractAddress}
                         </p>
                       </div>
                       <div className="space-y-1">
                         <p className="text-white/60 text-sm">Token ID</p>
                         <p className="text-white font-medium">
-                          {sampleNFT.tokenId}
+                          {tokenId}
                         </p>
                       </div>
                       <div className="space-y-1">
                         <p className="text-white/60 text-sm">Created</p>
                         <p className="text-white font-medium">
-                          {sampleNFT.created}
+                          {created}
                         </p>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <p className="text-white/60 text-sm">Traits</p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {sampleNFT.traits.map((trait, index) => (
+                        {traits.map((trait, index) => (
                           <div
                             key={index}
                             className="bg-white/5 rounded-lg p-2 text-center"
@@ -340,21 +303,20 @@ export default function Nft() {
                 <div className="flex items-center gap-6">
                   <button
                     onClick={handleLike}
-                    className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-                      isLiked ? "text-pink-500" : "text-white"
-                    }`}
+                    className={`flex items-center gap-2 text-lg font-medium transition-colors ${isLiked ? "text-pink-500" : "text-white"
+                      }`}
                   >
                     <Heart
                       size={24}
                       className={isLiked ? "fill-current" : ""}
                     />
                     <span>
-                      {isLiked ? sampleNFT.likes + 1 : sampleNFT.likes}
+                      {isLiked ? likes + 1 : likes}
                     </span>
                   </button>
                   <div className="flex items-center gap-2 text-lg font-medium text-white">
                     <Eye size={24} />
-                    <span>{sampleNFT.views}</span>
+                    <span>{views}</span>
                   </div>
                 </div>
                 <button
@@ -368,7 +330,7 @@ export default function Nft() {
                 <div>
                   <p className="text-white/60 text-sm">Current Price</p>
                   <p className="text-2xl font-bold text-white">
-                    {sampleNFT.price} ETH
+                    {price} ETH
                   </p>
                 </div>
                 <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#42007a] to-[#7f20ff] hover:from-[#4b0088] hover:to-[#8c37ff] text-white font-medium transition-all duration-300 shadow-lg hover:shadow-xl">
@@ -384,7 +346,7 @@ export default function Nft() {
                 <h2 className="text-xl font-semibold text-white">Comments</h2>
               </div>
               <div className="space-y-4 mb-6">
-                {sampleNFT.comments.map((comment) => (
+                {comments.map((comment) => (
                   <div key={comment.id} className="flex gap-3">
                     <img
                       src={comment.user.avatar}

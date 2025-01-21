@@ -119,7 +119,7 @@ const Header = () => {
           dark:text-white
           font-['Monoton'] text-glow"
           >
-            Hype
+            HyprStark
           </h1>
         </Link>
         <div className="flex items-center space-x-4">
